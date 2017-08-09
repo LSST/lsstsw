@@ -7,6 +7,16 @@ matrix:
       python: "3.4"
       env: MODE=lint
     - os: linux
+      language: python
+      python: "3.4"
+      env:
+        - MODE=docs
+        - LTD_MASON_PRODUCT="lsstsw"
+        - LTD_MASON_BUILD=true
+        # LTD Mason/LSST the Docs credentials
+        - secure: "dDFZK2drIdRWntjtlRjGOZevEJ4YBXd8oFi8k1J8F4hYfjX7vOWHr+t76+TSjZIjYs2nyoYFZSK6Du5ZrqRJYxntS4DwcU8Woj5iJ7rbPt6xSUQexhAahKefoarbvYEkQt/USZnDzcLPXvvh7yT9FiMx28/3f+C6iNFR6w4FpvA="
+        - secure: "jzUFcgO7x+Fgp5ZYFmxxWMTPg0GkpgwfbJcyEgR5CiDGJQQh43NVuAJf5AdpzIdQk1wGOwrEfPx+wEPdAHAhqWlRWtfnkXEcO4dPzeGD3WmNHb6B4BDyAyrNnG+RINYq2FsnY9ymps/DMbFGcC8Efua7YO9cYruJE29NUachzVk="
+    - os: linux
       env:
         - MODE=versiondb
         - VERSIONDB_PUSH=true
@@ -60,6 +70,12 @@ script: |
     lint)
       pip install -r requirements.txt
       ./bin/repos-lint ./etc/repos.yaml
+      ;;
+    docs)
+      pip install -r requirements.txt
+      pip install -r docs/requirements.txt
+      sphinx-build -b html -a -W -d docs/_build/doctree docs docs/_build/html
+      ltd-mason-travis --html-dir docs/_build/html --verbose
       ;;
     deploy*)
       # print git version
