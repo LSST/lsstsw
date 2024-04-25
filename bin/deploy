@@ -152,7 +152,7 @@ main() {
 
   cd "$LSSTSW"
 
-  fetch_repos.yaml 'main'
+  fetch_repos.yaml 'tickets/DM-44081'
 
   # install miniconda
   miniconda_lock="${miniconda_path}/.deployed"
