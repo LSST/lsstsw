@@ -146,7 +146,7 @@ fi
   #
   if [[ $UPDATE == true ]]; then
     config_curl
-    fetch_repos.yaml 'main'
+    fetch_repos.yaml 'tickets/DM-44081'
   fi
 
   #
