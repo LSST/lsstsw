@@ -17,7 +17,6 @@ LSST_EUPS_GITREPO=${LSST_EUPS_GITREPO:-https://github.com/RobertLuptonTheGood/eu
 # but it is not actually used to select the miniconda version.
 LSST_MINICONDA_VERSION="py38_4.9.2"
 LSST_MINICONDA_BASE_URL=${LSST_MINICONDA_BASE_URL:-https://github.com/conda-forge/miniforge/releases/latest/download}
-LSST_CONDA_CHANNELS=${LSST_CONDA_CHANNELS:-"nodefaults conda-forge"}
 LSST_GIT_VERSION=${LSST_GIT_VERSION:-2.18.0}
 LSST_LFS_VERSION=${LSST_LFS_VERSION:-2.4.2}
 LSST_BUILD_GITREV=${LSST_BUILD_GITREV:-main}
@@ -135,6 +134,8 @@ main() {
 
   parse_args "$@"
 
+  RUBIN_ENV_CONDA_CHANNELS="nodefaults conda-forge"
+
   if [[ -n $ENV_VERSION ]]; then
     RUBIN_ENV_VERSION=$ENV_VERSION
   elif [[ -n $ENVREF ]]; then
@@ -145,6 +146,11 @@ main() {
   else
     RUBIN_ENV_VERSION=$LSST_SPLENV_REF
   fi
+
+  if [[ $RUBIN_ENV_VERSION == *dev ]]; then
+    RUBIN_ENV_CONDA_CHANNELS="nodefaults conda-forge/label/rubin-env_dev conda-forge"
+  fi
+  LSST_CONDA_CHANNELS=${LSST_CONDA_CHANNELS:-"${RUBIN_ENV_CONDA_CHANNELS}"}
 
   export LSST_CONDA_ENV_NAME=${LSST_CONDA_ENV_NAME:-"${SPLENV_BASE_NAME}-${RUBIN_ENV_VERSION}"}
 
